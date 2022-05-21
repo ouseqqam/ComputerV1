@@ -1,31 +1,38 @@
 import math
+import re
 
-str = "2 * X ^ 2 - 33 * X ^ 1 + 2 * X ^ 0 = 3 * X ^ 2"
-str = str.replace(" ", "").lower()
+regex = '^([-+]?\d*(\.?\d+)?\s?\*\s?(X\s?(\^\s?[+]?\d+)))+\s?=\s?(0|(([-+]?\d*(\.?\d+)?\s?\*\s?(X\s?(\^\s?[+]?\d+)))+))'
+st = "5*X^0+2*X^1 + 33*X^2=0"
+x = re.search(regex, st)
+
+if x == None:
+    exit("Error")
+st = st.replace(" ", "").lower()
 
 data = []
-n = len(str)
+n = len(st)
 i = 0
+sign = 1
 while i < n:
     coef = ''
-    if str[i] == '=':
+    if st[i] == '=':
         i += 1
-    while i < n and str[i] != '*':
-        coef += str[i]
+        sign = -1
+    while i < n and st[i] != '*':
+        coef += st[i]
         i += 1
     i += 3
     if i >= n:
         break
-    power = int(str[i])
+    power = int(st[i])
     s1 = {
-    'coef': int(coef),
+    'coef': sign * float(coef),
     'power': power
     }
     data.append(s1)
     i += 1
-print(data)
+
 n = len(data)
-print(n)
 i = 0
 
 while i < n - 1:
@@ -38,15 +45,61 @@ while i < n - 1:
         j += 1
     i += 1
 
-a = data[0]['coef']
-b = data[1]['coef']
-c = data[2]['coef']
+n = len(data)
+i = 0
 
-delta = b * b - 4 * a * c
+while i < n - 1:
+    j = i + 1
+    while j < n:
+        if data[i]['power'] < data[j]['power']:
+            c = data[i]
+            data[i] = data[j]
+            data[j] = c
+        j += 1
+    i += 1
 
-if delta = 0:
-    x0 = -b / 2 * a
-else if delta > 0 :
-    x1 = -b - math.sqrt(delta) / 2 * a
-    x2 = -b + math.sqrt(delta) / 2 * a
+test = 'Reduced form: '
+n = len(data)
+i = 0
 
+data1 = data[::-1]
+while i < n:
+    coef = str(data1[i]['coef'])
+    power = str(data1[i]['power'])
+    test = test + coef + ' * X ^ ' + power
+    if i != n - 1:
+        test += ' + '
+    i += 1
+    if i == n:
+        test += ' = 0'
+print(test)
+
+degree = data[0]['power']
+print("Polynomial degree:", degree)
+if degree > 2:
+    print("The polynomial degree is strictly greater than 2, I can't solve.")
+elif degree == 2:
+    a = data[0]['coef']
+    b = data[1]['coef']
+    c = data[2]['coef']
+
+    delta = b * b - 4 * a * c
+
+    if delta == 0:
+        x0 = -b / 2 * a
+        print("x0 = ", x0)
+    elif delta > 0 :
+        x1 = -b - math.sqrt(delta) / 2 * a
+        x2 = -b + math.sqrt(delta) / 2 * a
+        print("Discriminant is strictly positive, the two solutions are:")
+        print( x1)
+        print(x2)
+    if delta < 0:
+        print("The equation has no real solution.")
+elif degree == 1:
+    x = -1 * data[1]['coef'] /  data[0]['coef']
+elif degree == 0 and len(data) == 1:
+    if data[0]['coef'] != 0:
+        print("The equation has no solution.")
+    else:
+        print("Each real number is a solution")
