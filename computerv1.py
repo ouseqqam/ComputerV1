@@ -1,8 +1,11 @@
 import math
 import re
 
-regex = '^([-+]?\d*(\.?\d+)?\s?\*\s?(X\s?(\^\s?[+]?\d+)))+\s?=\s?(0|(([-+]?\d*(\.?\d+)?\s?\*\s?(X\s?(\^\s?[+]?\d+)))+))'
-st = "5*X^0+2*X^1 + 33*X^2=0"
+def sqrt(nb):
+    return nb ** 0.5
+
+regex = '^(([-+]\s?)?\d*(\.?\d+)?\s?\*\s?(X\s?(\^\s?[+]?\d+))\s?)+=\s?(0|((([-+]\s)?\d*(\.?\d+)?\s?\*\s?(X\s?(\^\s?[+]?\d+))\s?)+))'
+st = "-33 * X ^ 2 + 5 * X ^ 1 + 1 * X ^ 0 = 0"
 x = re.search(regex, st)
 
 if x == None:
@@ -89,13 +92,18 @@ elif degree == 2:
         x0 = -b / 2 * a
         print("x0 = ", x0)
     elif delta > 0 :
-        x1 = -b - math.sqrt(delta) / 2 * a
-        x2 = -b + math.sqrt(delta) / 2 * a
+        x1 = -b - sqrt(delta) / 2 * a
+        x2 = -b + sqrt(delta) / 2 * a
         print("Discriminant is strictly positive, the two solutions are:")
         print( x1)
         print(x2)
     if delta < 0:
-        print("The equation has no real solution.")
+        delta = -delta
+        z1r = -b / 2 * a
+        z1i = sqrt(delta) / 2 * a
+        print("Discriminant is strictly negative, the equation have two solution in C:")
+        print(str(z1r) + " - i * " + str(z1i))
+        print(str(z1r) + " + i * " + str(z1i))
 elif degree == 1:
     x = -1 * data[1]['coef'] /  data[0]['coef']
 elif degree == 0 and len(data) == 1:
