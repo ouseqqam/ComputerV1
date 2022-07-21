@@ -10,10 +10,16 @@ if len(sys.argv) != 2:
     exit("ERROR")
 
 st = sys.argv[1]
-regex = '^((([-+]\s?)?\d*(\.?\d+)?\s?(\*\s?(X\s?(\^\s?[+-]?\d+)?)\s?)?)+)=\s?(\d|((([-+]\s?)?\d*(\.?\d+)?\s?(\*\s?(X\s?(\^\s?[+-]?\d+)?)\s?)?)+))$'
+st = st.replace(" ", "")
+regex = r"^(([-+])?((\d\.)?\d)?(\*?X(\^[+-]?(\d+))?)?)+=(([-+])?((\d\.)?\d)?(\*?X(\^[+-]?(\d+))?)?)+$"
 x = re.search(regex, st)
+
 if x == None:
-    exit("Error")
+    exit("Errora")
+if st[0] == '=':
+    exit("ERROR")
+if st[len(st) - 1] == '=':
+    exit("ERROR")
 st = st.replace(" ", "").lower()
 
 data = []
@@ -41,6 +47,8 @@ while i < n:
             if st[i] >= '0' and st[i] <= '9' or st[i] == '.':
                 coef += st[i]
             else:
+                if st[i] == 'x':
+                    exit("ERROR")
                 if st[i] == '*':
                     power = '1'
                     i += 2
@@ -92,6 +100,7 @@ while i < n - 1:
 
 n = len(data)
 i = 0
+
 
 while i < n:
     if data[i]['power'] < 0:
@@ -145,7 +154,7 @@ while i < n:
     i += 1
     if i == n:
         test += ' = 0'
-    if len(data1) == 1 and data1[0]['coef'] == 0 and data1[0]['power'] == 0:
+    if len(data1) == 1 and data1[0]['coef'] == 0 and (data1[0]['power'] == 0 or data1[0]['power'] == 1):
         test = "Reduced form: 0 = 0"
 print(test)
 
@@ -188,12 +197,16 @@ if degree == 2:
         print(str(z1r) + " - i * " + str(z1i))
         print(str(z1r) + " + i * " + str(z1i))
 elif degree == 1:
+    if len(data) == 1:
+        if data[0]['power'] == 1:
+            print("The solution is:")
+            exit('0')
     if data[0]['coef'] == 0:
         print("The equation has no solution.")
     else:
         x = -1 * data[1]['coef'] /  data[0]['coef']
-    print("The solution is:")
-    print(x)
+        print("The solution is:")
+        print(x)
 elif degree == 0 and len(data) == 1:
     if data[0]['coef'] != 0:
         print("The equation has no solution.")
