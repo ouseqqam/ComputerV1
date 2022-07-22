@@ -147,6 +147,8 @@ while i < n:
     coef = data1[i]['coef']
     power = data1[i]['power']
     powers = str(data1[i]['power'])
+    if data[0]['coef'] < 0:
+        test = '- '
     if coef > 0:
         coefs = str(data1[i]['coef'])
         if power > 1:
