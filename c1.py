@@ -148,7 +148,7 @@ while i < n:
     power = data1[i]['power']
     powers = str(data1[i]['power'])
     if data[0]['coef'] < 0:
-        test = '- '
+        test += '-'
     if coef > 0:
         coefs = str(data1[i]['coef'])
         if power > 1:
@@ -182,6 +182,8 @@ if degree > 2:
     print("The polynomial degree is strictly greater than 2, I can't solve.")
 if degree == 2:
     a = data[0]['coef']
+    b = 0
+    c = 0
     if len(data) == 3:
         a = data[0]['coef']
         b = data[1]['coef']
@@ -193,9 +195,6 @@ if degree == 2:
         elif data[1]['power'] == 0:
             b = 0
             c = data[1]['coef']
-        elif len(data) == 1:
-            b = 0
-            c = 0
     delta = b * b - (4 * a * c)
     if delta == 0:
         x0 = -b / (2 * a)
