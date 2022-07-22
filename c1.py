@@ -15,7 +15,7 @@ regex = r"^(([-+])?((\d\.)?\d)?(\*?X(\^[+-]?(\d+))?)?)+=(([-+])?((\d\.)?\d)?(\*?
 x = re.search(regex, st)
 
 if x == None:
-    exit("Errora")
+    exit("Error")
 if st[0] == '=':
     exit("ERROR")
 if st[len(st) - 1] == '=':
@@ -101,11 +101,23 @@ while i < n - 1:
 n = len(data)
 i = 0
 
+while i < n:
+    if data[i]['coef'] == 0:
+        del data[i]
+        n -= 1
+        i -= 1
+    i += 1
+
+n = len(data)
+i = 0
+
 
 while i < n:
     if data[i]['power'] < 0:
         exit("ERROR")
     i += 1
+
+
 
 n = len(data)
 i = 0
@@ -125,6 +137,11 @@ n = len(data)
 i = 0
 
 data1 = data[::-1]
+
+if len(data) == 0:
+    print("Reduced form: 0 = 0")
+    print("Each real number is a solution")
+    exit()
 
 while i < n:
     coef = data1[i]['coef']
@@ -154,8 +171,6 @@ while i < n:
     i += 1
     if i == n:
         test += ' = 0'
-    if len(data1) == 1 and data1[0]['coef'] == 0 and (data1[0]['power'] == 0 or data1[0]['power'] == 1):
-        test = "Reduced form: 0 = 0"
 print(test)
 
 
