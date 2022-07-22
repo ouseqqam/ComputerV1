@@ -147,7 +147,7 @@ try :
         coef = data1[i]['coef']
         power = data1[i]['power']
         powers = str(data1[i]['power'])
-        if i == 0 and data[i]['coef'] < 0:
+        if i == 0 and data1[i]['coef'] < 0:
             test += '-'
         if coef > 0:
             coefs = str(data1[i]['coef'])
